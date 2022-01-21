@@ -37,4 +37,4 @@
 # Full Prototype
 
 ## Models
-![Arch](http://www.plantuml.com/plantuml/proxy?cache=no&src=diagrams/models.puml)
+![Arch](http://www.plantuml.com/plantuml/proxy?cache=no&src=https://raw.githubusercontent.com/santunioni/SnacksBar/master/diagrams/models.puml)
