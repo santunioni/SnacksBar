@@ -1,0 +1,87 @@
+@startuml
+skinparam titleBorderRoundCorner 15
+skinparam titleBorderThickness 3
+skinparam titleBorderColor red
+skinparam titleBackgroundColor #FFF
+title Snacks bar
+
+orders.SnackLineItem o-- products.Snack
+orders.SnackLineItem o-- products.Ingredient
+orders.DrinkLineItem o-- products.Drink
+
+
+
+interface Priced {
+    + get_price() -> Decimal
+}
+
+
+
+namespace products #DAA {
+class Ingredient {
+    + id: int
+    + name: str
+    + price: Decimal
+}
+
+class Snack {
+    + id: int
+    + base: Base
+    + ingredients: []Ingredient
+}
+class Drink {
+    + id: int
+    + name: str
+    + price: float
+}
+class Base {
+    + ingredients: []Ingredient
+    + price: float
+}
+}
+products.Ingredient ..|> Priced
+products.Snack ..|> Priced
+products.Drink ..|> Priced
+products.Base ..|> Priced
+products.Snack o-- products.Ingredient
+products.Snack o-- products.Base
+
+
+
+namespace menu #FF9 {
+class SnackCategory {
+    + base: Base
+
+    + get_snacks() -> []Snack
+}
+class Menu {
+}
+}
+menu.SnackCategory o-- products.Base
+menu.SnackCategory --> products.Snack
+menu.Menu *-- menu.SnackCategory
+
+
+
+namespace orders #ADA {
+class Order {
+    - items: []LineItem
+}
+
+class SnackLineItem {
+    + id: int
+    + lanche: Snack
+    + additions: []Ingredient
+    + removals: []Ingredient
+}
+
+interface LineItem {
+    + get_description() -> str
+}
+}
+orders.Order ..|> Priced
+orders.LineItem ..|> Priced
+orders.Order o-- orders.LineItem
+orders.SnackLineItem ..|> orders.LineItem
+orders.DrinkLineItem ..|> orders.LineItem
+@enduml
