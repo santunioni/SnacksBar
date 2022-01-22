@@ -26,7 +26,7 @@ class Ingredient {
 
 class Snack {
     + id: int
-    + base: Base
+    + category: Category
     + ingredients: []Ingredient
 }
 class Drink {
@@ -34,7 +34,7 @@ class Drink {
     + name: str
     + price: float
 }
-class Base {
+class Category {
     + ingredients: []Ingredient
     + price: float
 }
@@ -42,22 +42,22 @@ class Base {
 products.Ingredient ..|> Priced
 products.Snack ..|> Priced
 products.Drink ..|> Priced
-products.Base ..|> Priced
+products.Category ..|> Priced
 products.Snack o-- products.Ingredient
-products.Snack o-- products.Base
+products.Snack o-- products.Category
 
 
 
 namespace menu #FF9 {
 class SnackCategory {
-    + base: Base
+    + category: Category
 
     + get_snacks() -> []Snack
 }
 class Menu {
 }
 }
-menu.SnackCategory o-- products.Base
+menu.SnackCategory o-- products.Category
 menu.SnackCategory --> products.Snack
 menu.Menu *-- menu.SnackCategory
 

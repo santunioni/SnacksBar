@@ -48,6 +48,7 @@ fastapi = "^0.72.0"
 uvicorn = "^0.17.0"
 SQLAlchemy = "^1.4.29"
 throttled = {path = "../../OpenSource/ThrottledAPI"}
+ujson = "^5.1.0"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.931"
@@ -60,6 +61,8 @@ pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
 devtools = "^0.8.0"
 tox = "^3.24.5"
+alembic = "^1.7.5"
+sqlalchemy-stubs = "^0.4"
 
 [tool.pylint.design]
 max-returns = 8
