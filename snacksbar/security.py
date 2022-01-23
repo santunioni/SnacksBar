@@ -62,5 +62,5 @@ def check_credentials(
     if len(required_not_granted) > 0:
         raise create_exception(
             security_scopes,
-            detail=f"Not enough permissions. Required scopes: {' '.join(required_not_granted)}",
+            detail=f"Not enough permissions. Missing: scopes='{' '.join(required_not_granted)}'",
         )

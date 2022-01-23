@@ -6,7 +6,6 @@ from .dtos import UserID, UserInDB
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-
 fake_users_db = {
     "johndoe": {
         "username": "johndoe",

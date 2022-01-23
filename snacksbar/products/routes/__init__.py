@@ -17,7 +17,6 @@ from .snacks import router as snacks_router
 router = APIRouter(dependencies=[read_products])
 router.include_router(snacks_router)
 
-
 ProductsCRUD(
     Names("category", "categories"), Category, CategoryIn, CategoryOut
 ).attach_to(router)
@@ -32,4 +31,5 @@ ProductsCRUD(
 @router.on_event("startup")
 def migrate():
     engine = get_session_maker().kw["bind"]
-    Base.metadata.create_all(bind=engine)
+    if "sqlite:///" in str(engine.url):
+        Base.metadata.create_all(bind=engine)

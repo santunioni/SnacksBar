@@ -7,7 +7,6 @@ from sqlalchemy.orm import relationship
 
 Base = declarative_base()
 
-
 snacks_have_ingredients = sql.Table(
     "snacks_have_ingredients",
     Base.metadata,
