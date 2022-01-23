@@ -1,3 +1,9 @@
+## 0.2.1 (2022-01-23)
+
+### Fix
+
+- remove circular imports
+
 ## 0.2.0 (2022-01-23)
 
 ### Feat
