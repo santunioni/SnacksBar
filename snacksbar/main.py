@@ -7,15 +7,18 @@ from throttled import Rate
 from throttled.fastapi import APILimiter, HostBasedLimiter, TotalLimiter
 from throttled.strategy import FixedWindowStrategy
 
-from snacksbar import products
+from snacksbar import authserver, products, users
 
 api_limiter = APILimiter()
-strategy = FixedWindowStrategy(limit=Rate(1, 5))
+strategy = FixedWindowStrategy(limit=Rate(100, 5))
 api_limiter.append(TotalLimiter(strategy=strategy))
 api_limiter.append(HostBasedLimiter(strategy=strategy))
 
-app = FastAPI(dependencies=api_limiter.dependencies)
-app.include_router(products.router)
+app = FastAPI(title="Snacks bar", dependencies=api_limiter.dependencies)
+app.include_router(products.router, prefix="/products")
+app.include_router(authserver.router, prefix="/auth")
+app.include_router(users.router, prefix="/users")
+
 api_limiter.inject_middlewares_in_app(app)
 
 
