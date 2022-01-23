@@ -1,3 +1,9 @@
+## 0.2.3 (2022-01-23)
+
+### Fix
+
+- permission for reading user
+
 ## 0.2.2 (2022-01-23)
 
 ### Fix
