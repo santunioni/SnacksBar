@@ -67,4 +67,4 @@ repos:
   hooks:
   - id: flake8
     name: 'flake8: combines PEP8 style checks and pyflakes for error checking.'
-    args: [--max-line-length, '120', --exclude, resources/write_readme.py]
+    args: [--max-line-length, '100', --exclude, resources/write_readme.py]

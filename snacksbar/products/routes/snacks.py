@@ -4,9 +4,10 @@ from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
 from starlette import status
 
-from snacksbar.products.db.models import Snack
-from snacksbar.products.db.session import get_db
-from snacksbar.products.dtos import SnackIn, SnackOut
+from ..db.models import Snack
+from ..db.session import get_db
+from .dtos import SnackIn, SnackOut
+from .roles import modify_products
 
 router = APIRouter(prefix="/snacks", tags=["snacks"])
 
@@ -21,7 +22,12 @@ async def get_snack(id: int, session: Session = Depends(get_db)):
     return session.query(Snack).get(id)
 
 
-@router.post("/", response_model=SnackOut)
+@router.post(
+    "/",
+    status_code=status.HTTP_201_CREATED,
+    response_model=SnackOut,
+    dependencies=[modify_products],
+)
 async def post_snack(snack: SnackIn, session: Session = Depends(get_db)):
     snack = Snack(name=snack.name, category_id=snack.category)
     session.add(snack)
@@ -29,7 +35,7 @@ async def post_snack(snack: SnackIn, session: Session = Depends(get_db)):
     return SnackOut.from_orm(snack)
 
 
-@router.put("/{id}", response_model=SnackOut)
+@router.put("/{id}", response_model=SnackOut, dependencies=[modify_products])
 async def put_snack(id: int, snack: SnackIn, session: Session = Depends(get_db)):
     snack_db: Snack = session.query(Snack).get(id)
     snack_db.name = snack.name
@@ -38,7 +44,9 @@ async def put_snack(id: int, snack: SnackIn, session: Session = Depends(get_db))
     return SnackOut.from_orm(snack_db)
 
 
-@router.delete("/{id}", status_code=204)
+@router.delete(
+    "/{id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[modify_products]
+)
 async def delete_snack(id: int, response: Response, session: Session = Depends(get_db)):
     snack = session.query(Snack).get(id)
     if snack is None:
