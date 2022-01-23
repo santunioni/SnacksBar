@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 import ujson
 from pydantic import BaseModel
 from sqlalchemy import create_engine
@@ -10,6 +12,7 @@ class APIModel(BaseModel):
         orm_mode = True
 
 
+@lru_cache(typed=True)
 def create_sqlalchemy_engine(db_url: str):
     kwargs = {}
     if db_url.startswith("sqlite:///"):

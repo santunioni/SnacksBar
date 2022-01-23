@@ -64,7 +64,7 @@ class ProductsCRUD:
         session.delete(product_db)
         session.commit()
 
-    def get_router(self) -> APIRouter:
+    def attach_to(self, base_router: APIRouter):
         router = APIRouter(prefix=f"/{self.__names.plural}", tags=[self.__names.plural])
 
         router.get(
@@ -101,4 +101,4 @@ class ProductsCRUD:
             name=f"Delete {self.__names.singular}",
         )(self.__delete_product)
 
-        return router
+        base_router.include_router(router)
