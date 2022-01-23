@@ -1,8 +1,9 @@
 from typing import Sequence
 
-from fastapi import APIRouter, Depends, Path, Response
+from fastapi import APIRouter, Depends, Path
 from sqlalchemy.orm import Session
 from starlette import status
+from starlette.exceptions import HTTPException
 
 from ..db.models import Snack
 from ..db.session import get_db
@@ -11,17 +12,21 @@ from .roles import modify_products
 
 router = APIRouter(prefix="/snacks", tags=["snacks"])
 
+g_session: Session = Depends(get_db)
+g_id: int = Path(..., alias="id")
+
 
 @router.get("/", response_model=Sequence[SnackOut])
-async def get_snacks(session: Session = Depends(get_db)):
+async def get_snacks(session=g_session):
     return list(map(SnackOut.from_orm, session.query(Snack).all()))
 
 
-@router.get("/{id}", response_model=Sequence[SnackOut])
-async def get_snack(
-    _id: int = Path(..., alias="id"), session: Session = Depends(get_db)
-):
-    return session.query(Snack).get(_id)
+@router.get("/{id}", response_model=SnackOut)
+async def get_snack_by_id(_id=g_id, session=g_session):
+    snack = session.query(Snack).get(_id)
+    if snack is None:
+        raise HTTPException(status_code=404, detail="Snack not found.")
+    return snack
 
 
 @router.post(
@@ -30,35 +35,29 @@ async def get_snack(
     response_model=SnackOut,
     dependencies=[modify_products],
 )
-async def post_snack(snack: SnackIn, session: Session = Depends(get_db)):
+async def post_snack(snack: SnackIn, session=g_session):
     snack = Snack(name=snack.name, category_id=snack.category)
     session.add(snack)
     session.commit()
-    return SnackOut.from_orm(snack)
+    return snack
 
 
 @router.put("/{id}", response_model=SnackOut, dependencies=[modify_products])
-async def put_snack(
-    snack: SnackIn, _id: int = Path(..., alias="id"), session: Session = Depends(get_db)
-):
-    snack_db: Snack = session.query(Snack).get(_id)
+async def put_snack(snack: SnackIn, _id=g_id, session=g_session):
+    snack_db: Snack = await get_snack_by_id(_id, session)
     snack_db.name = snack.name
     snack_db.category_id = snack.category
     session.commit()
-    return SnackOut.from_orm(snack_db)
+    return snack_db
 
 
 @router.delete(
     "/{id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[modify_products]
 )
 async def delete_snack(
-    response: Response,
-    _id: int = Path(..., alias="id"),
-    session: Session = Depends(get_db),
+    _id=g_id,
+    session=g_session,
 ):
-    snack = session.query(Snack).get(_id)
-    if snack is None:
-        response.status_code = status.HTTP_404_NOT_FOUND
-        return response
-    session.delete(snack)
+    snack_db: Snack = await get_snack_by_id(_id, session)
+    session.delete(snack_db)
     session.commit()
