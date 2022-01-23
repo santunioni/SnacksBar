@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
 from starlette import status
 
-from snacksbar.products.db import get_db
-from snacksbar.products.models import Ingredient
-from snacksbar.products.parse import IngredientIn, IngredientOut
+from snacksbar.products.db.models import Ingredient
+from snacksbar.products.db.session import get_db
+from snacksbar.products.dtos import IngredientIn, IngredientOut
 
 router = APIRouter(prefix="/ingredients", tags=["ingredients"])
 

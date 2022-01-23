@@ -1,18 +1,12 @@
 from decimal import Decimal
 from typing import Sequence
 
-import ujson
-from pydantic import BaseModel, Field
+from pydantic import Field
+
+from snacksbar.utils import APIModel
 
 
-class FastModel(BaseModel):
-    class Config:
-        json_loads: ujson.loads
-        json_dumps: ujson.dumps
-        orm_mode = True
-
-
-class PricedIn(FastModel):
+class PricedIn(APIModel):
     name: str
     price: Decimal
 
@@ -45,7 +39,7 @@ class DrinkOut(PricedOut):
     ...
 
 
-class SnackIn(FastModel):
+class SnackIn(APIModel):
     name: str
     category: int = Field(..., alias="category_id")
     ingredients: Sequence[int] = Field(default_factory=list)

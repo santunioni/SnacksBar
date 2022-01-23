@@ -49,6 +49,8 @@ uvicorn = "^0.17.0"
 SQLAlchemy = "^1.4.29"
 throttled = {path = "../../OpenSource/ThrottledAPI"}
 ujson = "^5.1.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.931"

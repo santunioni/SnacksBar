@@ -4,9 +4,9 @@ from fastapi import APIRouter, Depends, Response
 from sqlalchemy.orm import Session
 from starlette import status
 
-from snacksbar.products.db import get_db
-from snacksbar.products.models import Category
-from snacksbar.products.parse import CategoryIn, CategoryOut
+from snacksbar.products.db.models import Category
+from snacksbar.products.db.session import get_db
+from snacksbar.products.dtos import CategoryIn, CategoryOut
 
 router = APIRouter(prefix="/categories", tags=["categories"])
 
