@@ -1,6 +1,6 @@
 from typing import Sequence
 
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Depends, Path, Response
 from sqlalchemy.orm import Session
 from starlette import status
 
@@ -18,8 +18,10 @@ async def get_snacks(session: Session = Depends(get_db)):
 
 
 @router.get("/{id}", response_model=Sequence[SnackOut])
-async def get_snack(id: int, session: Session = Depends(get_db)):
-    return session.query(Snack).get(id)
+async def get_snack(
+    _id: int = Path(..., alias="id"), session: Session = Depends(get_db)
+):
+    return session.query(Snack).get(_id)
 
 
 @router.post(
@@ -36,8 +38,10 @@ async def post_snack(snack: SnackIn, session: Session = Depends(get_db)):
 
 
 @router.put("/{id}", response_model=SnackOut, dependencies=[modify_products])
-async def put_snack(id: int, snack: SnackIn, session: Session = Depends(get_db)):
-    snack_db: Snack = session.query(Snack).get(id)
+async def put_snack(
+    snack: SnackIn, _id: int = Path(..., alias="id"), session: Session = Depends(get_db)
+):
+    snack_db: Snack = session.query(Snack).get(_id)
     snack_db.name = snack.name
     snack_db.category_id = snack.category
     session.commit()
@@ -47,8 +51,12 @@ async def put_snack(id: int, snack: SnackIn, session: Session = Depends(get_db))
 @router.delete(
     "/{id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[modify_products]
 )
-async def delete_snack(id: int, response: Response, session: Session = Depends(get_db)):
-    snack = session.query(Snack).get(id)
+async def delete_snack(
+    response: Response,
+    _id: int = Path(..., alias="id"),
+    session: Session = Depends(get_db),
+):
+    snack = session.query(Snack).get(_id)
     if snack is None:
         response.status_code = status.HTTP_404_NOT_FOUND
         return response

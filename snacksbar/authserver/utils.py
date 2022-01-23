@@ -30,6 +30,7 @@ def get_user_in_db(username: str) -> Optional[UserInDB]:
     if username in fake_users_db:
         user_dict = fake_users_db[username]
         return UserInDB(**user_dict)
+    return None
 
 
 def get_authenticated_user(username: str, password: str) -> Optional[UserID]:
