@@ -29,7 +29,7 @@ oauth2_scheme = OAuth2PasswordBearer(
 )
 
 
-def _create_exception(
+def create_exception(
     security_scopes: SecurityScopes, detail: Optional[str] = None
 ) -> HTTPException:
     authenticate_value = "Bearer"
@@ -42,7 +42,7 @@ def _create_exception(
     )
 
 
-def _get_token_obj(
+def get_token_obj(
     security_scopes: SecurityScopes, token: str = Depends(oauth2_scheme)
 ) -> TokenData:
     try:
@@ -50,17 +50,17 @@ def _get_token_obj(
             jwt.decode(token, SIGNATURE_KEY, algorithms=[HASH_ALGORITHM])
         )
     except (JWTError, ValidationError) as err:
-        raise _create_exception(security_scopes) from err
+        raise create_exception(security_scopes) from err
 
 
 def check_credentials(
-    security_scopes: SecurityScopes, token: TokenData = Depends(_get_token_obj)
+    security_scopes: SecurityScopes, token: TokenData = Depends(get_token_obj)
 ) -> None:
     required_not_granted = tuple(
         itertools.filterfalse(token.scopes.__contains__, security_scopes.scopes)
     )
     if len(required_not_granted) > 0:
-        raise _create_exception(
+        raise create_exception(
             security_scopes,
             detail=f"Not enough permissions. Required scopes: {' '.join(required_not_granted)}",
         )

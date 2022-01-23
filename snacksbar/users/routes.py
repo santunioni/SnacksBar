@@ -1,21 +1,10 @@
-from fastapi import APIRouter, Depends, Security
-from fastapi.security import SecurityScopes
+from fastapi import APIRouter, Security
 from starlette.exceptions import HTTPException
 
-from snacksbar.security import TokenData, _create_exception, _get_token_obj
-
+from .dependencies import get_current_user
 from .dtos import UserID
 
 router = APIRouter(tags=["users"])
-
-
-def get_current_user(
-    security_scopes: SecurityScopes, token: TokenData = Depends(_get_token_obj)
-):
-    user = UserID(**token.dict())
-    if user is None:
-        raise _create_exception(security_scopes)
-    return user
 
 
 @router.get("/me", response_model=UserID)
