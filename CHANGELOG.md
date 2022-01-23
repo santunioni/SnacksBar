@@ -1,3 +1,9 @@
+## 0.2.2 (2022-01-23)
+
+### Fix
+
+- status code when no object found
+
 ## 0.2.1 (2022-01-23)
 
 ### Fix
