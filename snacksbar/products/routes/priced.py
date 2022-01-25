@@ -5,10 +5,11 @@ from sqlalchemy.orm import Session
 from starlette import status
 from starlette.exceptions import HTTPException
 
+from snacksbar.security import Scopes
+
 from ..db.models import Base
 from ..db.session import get_db
 from .dtos import PricedIn, PricedOut
-from .roles import modify_products
 
 
 class Names(NamedTuple):
@@ -83,21 +84,21 @@ class ProductsCRUD:
             "/",
             status_code=status.HTTP_201_CREATED,
             response_model=self.__product_out,
-            dependencies=[modify_products],
+            dependencies=[Scopes.CHANGE_PRODUCTS.fastapi],
             name=f"Post {self.__names.singular}",
         )(self.__post_product)
 
         router.put(
             "/{id}",
             response_model=self.__product_out,
-            dependencies=[modify_products],
+            dependencies=[Scopes.CHANGE_PRODUCTS.fastapi],
             name=f"Put {self.__names.singular}",
         )(self.__put_product)
 
         router.delete(
             "/{id}",
             status_code=status.HTTP_204_NO_CONTENT,
-            dependencies=[modify_products],
+            dependencies=[Scopes.CHANGE_PRODUCTS.fastapi],
             name=f"Delete {self.__names.singular}",
         )(self.__delete_product)
 

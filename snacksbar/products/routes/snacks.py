@@ -5,10 +5,11 @@ from sqlalchemy.orm import Session
 from starlette import status
 from starlette.exceptions import HTTPException
 
+from snacksbar.security import Scopes
+
 from ..db.models import Snack
 from ..db.session import get_db
 from .dtos import SnackIn, SnackOut
-from .roles import modify_products
 
 router = APIRouter(prefix="/snacks", tags=["snacks"])
 
@@ -33,7 +34,7 @@ async def get_snack_by_id(_id=g_id, session=g_session):
     "/",
     status_code=status.HTTP_201_CREATED,
     response_model=SnackOut,
-    dependencies=[modify_products],
+    dependencies=[Scopes.CHANGE_PRODUCTS.fastapi],
 )
 async def post_snack(snack: SnackIn, session=g_session):
     snack = Snack(name=snack.name, category_id=snack.category)
@@ -42,7 +43,9 @@ async def post_snack(snack: SnackIn, session=g_session):
     return snack
 
 
-@router.put("/{id}", response_model=SnackOut, dependencies=[modify_products])
+@router.put(
+    "/{id}", response_model=SnackOut, dependencies=[Scopes.CHANGE_PRODUCTS.fastapi]
+)
 async def put_snack(snack: SnackIn, _id=g_id, session=g_session):
     snack_db: Snack = await get_snack_by_id(_id, session)
     snack_db.name = snack.name
@@ -52,7 +55,9 @@ async def put_snack(snack: SnackIn, _id=g_id, session=g_session):
 
 
 @router.delete(
-    "/{id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[modify_products]
+    "/{id}",
+    status_code=status.HTTP_204_NO_CONTENT,
+    dependencies=[Scopes.CHANGE_PRODUCTS.fastapi],
 )
 async def delete_snack(
     _id=g_id,

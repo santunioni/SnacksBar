@@ -1,21 +1,16 @@
-from fastapi import Depends
-from fastapi.security import SecurityScopes
+from typing import Optional
 
-from snacksbar.security import (
-    TokenData,
-    check_credentials,
-    create_exception,
-    get_token_obj,
-)
+from fastapi import Depends
+
+from snacksbar.security import TokenData, get_token_obj
 
 from .dtos import UserID
 
 
 def get_current_user(
-    security_scopes: SecurityScopes, token: TokenData = Depends(get_token_obj)
-):
-    check_credentials(security_scopes, token)
+    token: Optional[TokenData] = Depends(get_token_obj),
+) -> Optional[UserID]:
+    if token is None:
+        return None
     user = UserID(**token.dict())
-    if user is None:
-        raise create_exception(security_scopes)
     return user

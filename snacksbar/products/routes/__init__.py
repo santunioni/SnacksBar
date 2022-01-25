@@ -1,5 +1,7 @@
 from fastapi import APIRouter
 
+from snacksbar.security import Scopes
+
 from ..db.models import Base, Category, Drink, Ingredient
 from ..db.session import get_session_maker
 from .dtos import (
@@ -11,10 +13,9 @@ from .dtos import (
     IngredientOut,
 )
 from .priced import Names, ProductsCRUD
-from .roles import read_products
 from .snacks import router as snacks_router
 
-router = APIRouter(dependencies=[read_products])
+router = APIRouter(dependencies=[Scopes.READ_PRODUCTS.fastapi])
 router.include_router(snacks_router)
 
 ProductsCRUD(
