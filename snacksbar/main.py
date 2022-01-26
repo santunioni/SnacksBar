@@ -2,6 +2,7 @@ from typing import Optional
 
 import uvicorn
 from fastapi import Depends, FastAPI
+from starlette.middleware.base import BaseHTTPMiddleware
 from throttled.fastapi import (
     HostBasedLimiter,
     TotalLimiter,
@@ -31,11 +32,12 @@ dependencies, middlewares = split_dependencies_and_middlewares(
     UserLimiter(strategy=FixedWindowStrategy(limit=Rate(2, 5))),
 )
 
-app = FastAPI(title="Snacks bar", dependencies=dependencies)
-app.include_router(products_router, prefix="/products")
-app.include_router(users_router, prefix="/users")
+app = FastAPI(title="Snacks bar")
+app.include_router(products_router, prefix="/products", dependencies=dependencies)
+app.include_router(users_router, prefix="/users", dependencies=dependencies)
 app.include_router(auth_router, prefix="/auth")
-map(app.add_middleware, middlewares)
+for mid in middlewares:
+    app.add_middleware(BaseHTTPMiddleware, dispatch=mid)
 
 
 if __name__ == "__main__":
