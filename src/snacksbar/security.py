@@ -6,9 +6,10 @@ from typing import List, Optional
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import OAuth2PasswordBearer, SecurityScopes
 from jose import JWTError, jwt
-from pydantic import BaseSettings, Field, ValidationError
+from pydantic import Field, ValidationError
 
 from snacksbar.constants import HASH_ALGORITHM, SIGNATURE_KEY
+from snacksbar.settings import APISettings
 from snacksbar.users.dtos import UserID
 
 
@@ -19,15 +20,6 @@ class TokenData(UserID):
     @property
     def sub(self) -> str:
         return self.username
-
-
-class OAuthSettings(BaseSettings):
-    OAUTH_TOKEN_URL: str = "auth/token"
-
-    @classmethod
-    @lru_cache()
-    def from_cache(cls):
-        return OAuthSettings()
 
 
 class Scopes(Enum):
@@ -53,7 +45,7 @@ class Scopes(Enum):
 
 
 _oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl=OAuthSettings.from_cache().OAUTH_TOKEN_URL, scopes=Scopes.dict()
+    tokenUrl=APISettings.from_cache().OAUTH_TOKEN_URL, scopes=Scopes.dict()
 )
 
 
