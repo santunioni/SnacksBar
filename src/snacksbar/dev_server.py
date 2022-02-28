@@ -5,7 +5,7 @@ from snacksbar.main import create_app
 
 app = create_app()
 
-app.include_router(auth_router, prefix="/auth")
+app.include_router(auth_router)
 
 if __name__ == "__main__":
     uvicorn.run(

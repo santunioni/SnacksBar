@@ -8,7 +8,7 @@ from global_utils import SQLiteDBMaker
 class APISettings(BaseSettings):
     SNACKSBAR_DB_URL: str = Field(default_factory=SQLiteDBMaker("snacksbar"))
     CACHE_DB_URL: str = "redis://localhost:6379/0"
-    OAUTH_TOKEN_URL: str = "auth/token"
+    OAUTH_TOKEN_URL: str = "token"
 
     @classmethod
     @lru_cache()
