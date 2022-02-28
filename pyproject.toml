@@ -44,7 +44,7 @@ authors = ["Vinícius Vargas <santunionivinicius@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.7"
-fastapi = "^0.72.0"
+fastapi = "^0.74.1"
 uvicorn = "^0.17.0"
 SQLAlchemy = "^1.4.29"
 ujson = "^5.1.0"
@@ -53,15 +53,17 @@ passlib = {extras = ["bcrypt"], version = "^1.7.4"}
 python-multipart = "^0.0.5"
 redis = "^4.1.4"
 throttled = "^0.2.1"
+jose = "^1.0.0"
+psycopg2 = "^2.9.3"
 
 [tool.poetry.dev-dependencies]
 mypy = "^0.931"
 pylint = "^2.12.2"
-commitizen = "^2.20.4"
-black = "^21.12b0"
+commitizen = "^2.21.2"
+black = "^22.1.0"
 isort = "^5.10.1"
 pre-commit = "^2.16.0"
-pytest = "^6.2.5"
+pytest = "^7.0.1"
 pytest-cov = "^3.0.0"
 devtools = "^0.8.0"
 tox = "^3.24.5"

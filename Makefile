@@ -1,7 +1,7 @@
 lint:
 	@poetry run isort .
 	@poetry run black .
-	@poetry run pylint snacksbar
+	@poetry run pylint src
 	@poetry run pylint tests
 
 mypy:
@@ -17,3 +17,7 @@ checks: lint mypy pre-commit test
 
 push:
 	@git push && git push --tags
+
+run:
+	@docker-compose up --build -d
+	@docker-compose logs -f

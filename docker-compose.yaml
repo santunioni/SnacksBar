@@ -1,0 +1,41 @@
+services:
+
+  api:
+    build: .
+    command: snacksbar.main:app
+    ports:
+    - 8001:8000
+    environment:
+    - OAUTH_TOKEN_URL=http://localhost:8002/token
+    - PRODUCTS_DB_URL=postgresql://snacksbar:snacksbar@db:5432/snacksbar
+    - CACHE_DB_URL=redis://cache:6379/0
+
+  auth:
+    build: .
+    command: authserver.main:app
+    ports:
+    - 8002:8000
+    environment:
+    - AUTH_DB_URL=postgresql://authserver:authserver@db:5432/authserver
+
+  db:
+    image: postgres:14.2
+    ports:
+    - 5432:5432
+    environment:
+    - POSTGRES_PASSWORD=password
+    volumes:
+    - ./data/postgres:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4:6.5
+    environment:
+    - PGADMIN_DEFAULT_EMAIL=user@domain.com
+    - PGADMIN_DEFAULT_PASSWORD=password
+    ports:
+    - 5433:80
+
+  cache:
+    image: redis:6.2.6
+    ports:
+    - 6379:6379
