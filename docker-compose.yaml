@@ -7,8 +7,8 @@ services:
     - 8001:8000
     environment:
     - OAUTH_TOKEN_URL=http://localhost:8002/token
-    - PRODUCTS_DB_URL=postgresql://snacksbar:snacksbar@db:5432/snacksbar
     - CACHE_DB_URL=redis://cache:6379/0
+    - SNACKSBAR_DB_URL=postgresql://snacksbar:snacksbar@db:5432/snacksbar
 
   auth:
     build: .
@@ -16,14 +16,24 @@ services:
     ports:
     - 8002:8000
     environment:
-    - AUTH_DB_URL=postgresql://authserver:authserver@db:5432/authserver
+    - AUTHSERVER_DB_URL=postgresql://authserver:authserver@db:5432/authserver
+
+  migration:
+    build: .
+    entrypoint: alembic upgrade head
+    environment:
+    - AUTHSERVER_DB_URL=postgresql://authserver:authserver@db:5432/authserver
+    - SNACKSBAR_DB_URL=postgresql://snacksbar:snacksbar@db:5432/snacksbar
+    depends_on:
+    - db
+    restart: on-failure
 
   db:
     image: postgres:14.2
     ports:
     - 5432:5432
     environment:
-    - POSTGRES_PASSWORD=password
+    - POSTGRES_PASSWORD=postgres
     volumes:
     - ./data/postgres:/var/lib/postgresql/data
 

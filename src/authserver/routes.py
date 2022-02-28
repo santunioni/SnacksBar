@@ -11,8 +11,6 @@ from snacksbar.constants import (
     SIGNATURE_KEY,
 )
 
-from .db.models import Base
-from .db.session import get_session_maker
 from .dtos import Token
 from .utils import get_authenticated_user
 
@@ -35,10 +33,3 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     }
     access_token = jwt.encode(data, SIGNATURE_KEY, algorithm=HASH_ALGORITHM)
     return {"access_token": access_token, "token_type": "bearer"}
-
-
-@router.on_event("startup")
-def migrate():
-    engine = get_session_maker().kw["bind"]
-    if "sqlite:///" in str(engine.url):
-        Base.metadata.create_all(bind=engine)

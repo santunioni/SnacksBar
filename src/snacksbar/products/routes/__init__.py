@@ -2,8 +2,7 @@ from fastapi import APIRouter
 
 from snacksbar.security import Scopes
 
-from ..db.models import Base, Category, Drink, Ingredient
-from ..db.session import get_session_maker
+from ..db.models import Category, Drink, Ingredient
 from .dtos import (
     CategoryIn,
     CategoryOut,
@@ -38,10 +37,3 @@ ProductsCRUD(
     product_in=IngredientIn,
     product_out=IngredientOut,
 ).attach_to(router)
-
-
-@router.on_event("startup")
-def migrate():
-    engine = get_session_maker().kw["bind"]
-    if "sqlite:///" in str(engine.url):
-        Base.metadata.create_all(bind=engine)

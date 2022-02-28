@@ -1,5 +1,4 @@
 lint:
-	@poetry run isort .
 	@poetry run black .
 	@poetry run pylint src
 	@poetry run pylint tests
@@ -19,5 +18,6 @@ push:
 	@git push && git push --tags
 
 run:
+	@mkdir -p data/
 	@docker-compose up --build -d
 	@docker-compose logs -f
