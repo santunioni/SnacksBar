@@ -34,7 +34,7 @@ async def get_snack_by_id(_id=g_id, session=g_session):
     "/",
     status_code=status.HTTP_201_CREATED,
     response_model=SnackOut,
-    dependencies=[Scopes.CHANGE_PRODUCTS.fastapi],
+    dependencies=[Scopes.CHANGE_PRODUCTS],
 )
 async def post_snack(snack: SnackIn, session=g_session):
     snack = Snack(name=snack.name, category_id=snack.category)
@@ -43,9 +43,7 @@ async def post_snack(snack: SnackIn, session=g_session):
     return snack
 
 
-@router.put(
-    "/{id}", response_model=SnackOut, dependencies=[Scopes.CHANGE_PRODUCTS.fastapi]
-)
+@router.put("/{id}", response_model=SnackOut, dependencies=[Scopes.CHANGE_PRODUCTS])
 async def put_snack(snack: SnackIn, _id=g_id, session=g_session):
     snack_db: Snack = await get_snack_by_id(_id, session)
     snack_db.name = snack.name
@@ -57,7 +55,7 @@ async def put_snack(snack: SnackIn, _id=g_id, session=g_session):
 @router.delete(
     "/{id}",
     status_code=status.HTTP_204_NO_CONTENT,
-    dependencies=[Scopes.CHANGE_PRODUCTS.fastapi],
+    dependencies=[Scopes.CHANGE_PRODUCTS],
 )
 async def delete_snack(
     _id=g_id,

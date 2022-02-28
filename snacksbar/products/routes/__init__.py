@@ -15,7 +15,7 @@ from .dtos import (
 from .priced import Names, ProductsCRUD
 from .snacks import router as snacks_router
 
-router = APIRouter(dependencies=[Scopes.READ_PRODUCTS.fastapi])
+router = APIRouter(dependencies=[Scopes.READ_PRODUCTS])
 router.include_router(snacks_router)
 
 ProductsCRUD(

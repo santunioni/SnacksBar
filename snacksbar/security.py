@@ -75,10 +75,13 @@ class Scopes(Enum):
     READ_USERS_ME = "me"
 
     @cachedproperty
-    def fastapi(self) -> Security:
+    def __fastapi(self) -> Security:
         return Security(
             _check_credentials, scopes=self.value.split(" "), use_cache=False
         )
+
+    def __get__(self, instance, owner):
+        return self.__fastapi
 
     def __str__(self):
         return self.value

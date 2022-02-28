@@ -84,21 +84,21 @@ class ProductsCRUD:
             "/",
             status_code=status.HTTP_201_CREATED,
             response_model=self.__product_out,
-            dependencies=[Scopes.CHANGE_PRODUCTS.fastapi],
+            dependencies=[Scopes.CHANGE_PRODUCTS],
             name=f"Post {self.__names.singular}",
         )(self.__post_product)
 
         router.put(
             "/{id}",
             response_model=self.__product_out,
-            dependencies=[Scopes.CHANGE_PRODUCTS.fastapi],
+            dependencies=[Scopes.CHANGE_PRODUCTS],
             name=f"Put {self.__names.singular}",
         )(self.__put_product)
 
         router.delete(
             "/{id}",
             status_code=status.HTTP_204_NO_CONTENT,
-            dependencies=[Scopes.CHANGE_PRODUCTS.fastapi],
+            dependencies=[Scopes.CHANGE_PRODUCTS],
             name=f"Delete {self.__names.singular}",
         )(self.__delete_product)
 

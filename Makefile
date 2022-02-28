@@ -10,7 +10,10 @@ mypy:
 test:
 	@poetry run pytest tests
 
-checks: lint mypy test
+pre-commit:
+	@pre-commit run --all-files --hook-stage merge-commit
+
+checks: lint mypy pre-commit test
 
 push:
 	@git push && git push --tags

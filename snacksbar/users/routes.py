@@ -9,7 +9,7 @@ from .dtos import UserID
 router = APIRouter(tags=["users"])
 
 
-@router.get("/me", response_model=UserID, dependencies=[Scopes.READ_USERS_ME.fastapi])
+@router.get("/me", response_model=UserID, dependencies=[Scopes.READ_USERS_ME])
 async def read_users_me(
     current_user: UserID = Depends(get_current_user),
 ):
