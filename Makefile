@@ -43,3 +43,6 @@ migrations:
 
 migrate:
 	@cd src || true && alembic upgrade head
+
+dev: migrate
+	@cd src && PYTHONPATH=. python snacksbar/dev_server.py
