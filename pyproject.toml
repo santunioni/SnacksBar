@@ -1,5 +1,5 @@
 [tool.commitizen]
-version = "0.3.0"
+version = "0.3.1"
 tag_format = "$major.$minor.$patch$prerelease"
 annotated_tag = true
 check_consistency = true
@@ -44,7 +44,7 @@ disallow_untyped_globals = false
 
 [tool.poetry]
 name = "snacksbar"
-version = "0.3.0"
+version = "0.3.1"
 description = ""
 authors = ["Vinícius Vargas <santunionivinicius@gmail.com>"]
 
