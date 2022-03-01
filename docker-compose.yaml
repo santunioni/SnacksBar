@@ -9,6 +9,9 @@ services:
     - OAUTH_TOKEN_URL=http://localhost:8002/token
     - CACHE_DB_URL=redis://cache:6379/0
     - SNACKSBAR_DB_URL=postgresql://snacksbar:snacksbar@db:5432/snacksbar
+    depends_on:
+    - db
+    - cache
 
   auth:
     build: .
@@ -17,6 +20,8 @@ services:
     - 8002:8000
     environment:
     - AUTHSERVER_DB_URL=postgresql://authserver:authserver@db:5432/authserver
+    depends_on:
+    - db
 
   migration:
     build: .
@@ -25,6 +30,8 @@ services:
     - AUTHSERVER_DB_URL=postgresql://authserver:authserver@db:5432/authserver
     - SNACKSBAR_DB_URL=postgresql://snacksbar:snacksbar@db:5432/snacksbar
     depends_on:
+    - api
+    - auth
     - db
     restart: on-failure
 
@@ -36,14 +43,7 @@ services:
     - POSTGRES_PASSWORD=postgres
     volumes:
     - ./data/postgres:/var/lib/postgresql/data
-
-  pgadmin:
-    image: dpage/pgadmin4:6.5
-    environment:
-    - PGADMIN_DEFAULT_EMAIL=user@domain.com
-    - PGADMIN_DEFAULT_PASSWORD=password
-    ports:
-    - 5433:80
+    - ./scripts/ddl.sql:/docker-entrypoint-initdb.d/ddl.sql
 
   cache:
     image: redis:6.2.6
