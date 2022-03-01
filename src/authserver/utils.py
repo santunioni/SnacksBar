@@ -2,7 +2,9 @@ from typing import Optional
 
 from passlib.context import CryptContext
 
-from .dtos import UserID, UserInDB
+from snacksbar.users.dtos import UserID
+
+from .dtos import UserInDB
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

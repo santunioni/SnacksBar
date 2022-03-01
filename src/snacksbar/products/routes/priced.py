@@ -29,7 +29,7 @@ class ProductsCRUD:
     ):
         self.__names = names
         self.__db_cls = db_cls
-        self.__product_in = product_in
+        _ = product_in
         self.__product_out = product_out
 
     async def __get_products(self, session=DependsSession):
@@ -37,7 +37,9 @@ class ProductsCRUD:
             map(self.__product_out.from_orm, session.query(self.__db_cls).all())
         )
 
-    async def __get_product_by_id(self, _id=ID_PATH, session=DependsSession):
+    async def __get_product_by_id(
+        self, _id=ID_PATH, session=DependsSession
+    ) -> PricedOut:
         product_db = session.query(self.__db_cls).get(_id)
         if product_db is None:
             raise HTTPException(
@@ -70,7 +72,7 @@ class ProductsCRUD:
 
         router.get(
             "/",
-            response_model=Sequence[self.__product_out],
+            response_model=Sequence[self.__product_out],  # type: ignore
             name=f"Get {self.__names.plural}",
         )(self.__get_products)
 

@@ -1,16 +1,29 @@
-lint:
+black:
 	@poetry run black .
-	@poetry run pylint src
-	@poetry run pylint tests
+
+autoflake:
+	@poetry run autoflake src \
+	--in-place \
+	--recursive \
+	--expand-star-imports \
+	--remove-duplicate-keys \
+	--remove-unused-variables \
+	--remove-all-unused-imports \
+	--ignore-init-module-imports
+
+pylint:
+	@poetry run pylint --rcfile pylint.cfg src tests
+
+lint: black autoflake pylint
 
 mypy:
-	@poetry run mypy src/
+	@poetry run mypy src tests
+
+pre-commit:
+	@pre-commit run --all-files --hook-stage merge-commit || true
 
 test:
 	@poetry run pytest tests
-
-pre-commit:
-	@pre-commit run --all-files --hook-stage merge-commit
 
 checks: lint mypy pre-commit test
 

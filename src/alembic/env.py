@@ -1,8 +1,10 @@
 import logging
 import re
 from logging.config import fileConfig
+from typing import Any, Callable, Dict, Mapping
 
 from sqlalchemy import create_engine
+from sqlalchemy.engine import Engine
 
 import authserver.db.models
 import authserver.settings
@@ -24,20 +26,21 @@ target_metadata = {
     "snacksbar": snacksbar.products.db.models.Base.metadata,
     "authserver": authserver.db.models.Base.metadata,
 }
+url_registry: Mapping[str, Callable[[], str]] = {
+    "snacksbar": lambda: snacksbar.settings.APISettings.from_cache().SNACKSBAR_DB_URL,
+    "authserver": lambda: authserver.settings.APISettings.from_cache().AUTHSERVER_DB_URL,
+}
 
 
 def url_factory(name) -> str:
-    return {
-        "snacksbar": lambda: snacksbar.settings.APISettings.from_cache().SNACKSBAR_DB_URL,
-        "authserver": lambda: authserver.settings.APISettings.from_cache().AUTHSERVER_DB_URL,
-    }[name]()
+    return url_registry[name]()
 
 
-def engine_factory(name):
+def engine_factory(name) -> Engine:
     return create_engine(url_factory(name))
 
 
-def run_migrations_offline():
+def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 
     This configures the context with just a URL
@@ -52,10 +55,10 @@ def run_migrations_offline():
     # for the --sql use case, run migrations for each URL into
     # individual files.
 
-    engines = {}
+    engines: Dict[str, Dict[str, Any]] = {}
     for name in DB_NAMES:
-        engines[name] = rec = {}
-        rec["url"] = url_factory(name)
+        rec = {"url": url_factory(name)}
+        engines[name] = rec
 
     for name, rec in engines.items():
         logger.info("Migrating database %s" % name)
@@ -73,7 +76,7 @@ def run_migrations_offline():
                 context.run_migrations(engine_name=name)
 
 
-def run_migrations_online():
+def run_migrations_online() -> None:
     """Run migrations in 'online' mode.
 
     In this scenario we need to create an Engine
@@ -84,10 +87,10 @@ def run_migrations_online():
     # for the direct-to-DB use case, start a transaction on all
     # engines, then run all migrations, then commit all transactions.
 
-    engines = {}
+    engines: Dict[str, Dict[str, Any]] = {}
     for name in DB_NAMES:
-        engines[name] = rec = {}
-        rec["engine"] = engine_factory(name)
+        rec = {"engine": engine_factory(name)}
+        engines[name] = rec
 
     for name, rec in engines.items():
         engine = rec["engine"]

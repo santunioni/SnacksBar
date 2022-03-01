@@ -2,10 +2,10 @@ from decimal import Decimal
 from typing import Sequence
 
 import sqlalchemy as sql
-from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
 from sqlalchemy.orm import relationship
 
-Base = declarative_base()
+Base: DeclarativeMeta = declarative_base()
 
 snacks_have_ingredients = sql.Table(
     "snacks_have_ingredients",

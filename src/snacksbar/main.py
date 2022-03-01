@@ -24,7 +24,8 @@ class UserLimiter(FastAPILimiter):
     """Client specific limiter"""
 
     def __call__(self, user: Optional[UserID] = Depends(get_current_user)):
-        self.limit(key=f"username={user.username}")
+        if user is not None:
+            self.limit(key=f"username={user.username}")
 
 
 def create_limiters() -> Sequence[FastAPILimiter]:

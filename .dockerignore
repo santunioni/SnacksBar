@@ -2,7 +2,9 @@
 **/*.yaml
 **/*.*ignore
 **/*.puml
-**/*cache*
+**/.coverage
+**/.*_cache/
+**/__pycache__/
 data/
 .idea/
 .vscode/

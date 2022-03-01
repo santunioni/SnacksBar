@@ -1,7 +1,7 @@
 import itertools
 from enum import Enum
 from functools import lru_cache
-from typing import List, Optional
+from typing import List, Mapping, Optional
 
 from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import OAuth2PasswordBearer, SecurityScopes
@@ -14,7 +14,7 @@ from snacksbar.users.dtos import UserID
 
 
 class TokenData(UserID):
-    username: Optional[str] = Field(..., alias="sub")
+    username: str = Field(..., alias="sub")
     scopes: List[str] = Field(default_factory=list)
 
     @property
@@ -31,7 +31,7 @@ class Scopes(Enum):
         return self.value[0]
 
     @classmethod
-    def dict(cls):
+    def dict(cls) -> Mapping[str, str]:
         return {e.value[0]: e.value[1] for e in cls}
 
     @lru_cache()

@@ -1,13 +1,11 @@
 [tool.commitizen]
 version = "0.2.3"
 tag_format = "$major.$minor.$patch$prerelease"
-update_changelog_on_bump = true
 annotated_tag = true
 check_consistency = true
 version_files = [
-    "VERSION",
     "pyproject.toml",
-    "snacksbar/__init__.py",
+    "src/snacksbar/__init__.py",
 ]
 
 [tool.mypy]
@@ -69,6 +67,7 @@ devtools = "^0.8.0"
 tox = "^3.24.5"
 sqlalchemy-stubs = "^0.4"
 python-dotenv = "^0.19.2"
+autoflake = "^1.4"
 
 [tool.pylint.design]
 max-returns = 8
