@@ -15,7 +15,7 @@ isort:
 	@poetry run isort src tests
 
 pylint:
-	@poetry run pylint --rcfile pylint.cfg src tests
+	@poetry run pylint src tests
 
 lint: black autoflake isort black pylint
 
