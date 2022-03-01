@@ -2,11 +2,11 @@ services:
 
   api:
     build: .
-    command: snacksbar.main:app
+    command: snacksbar:app
     ports:
-    - 8001:8000
+    - 8000:8000
     environment:
-    - OAUTH_TOKEN_URL=http://localhost:8002/token
+    - OAUTH_TOKEN_URL=http://localhost:8001/token
     - CACHE_DB_URL=redis://cache:6379/0
     - SNACKSBAR_DB_URL=postgresql://snacksbar:snacksbar@db:5432/snacksbar
     depends_on:
@@ -15,9 +15,9 @@ services:
 
   auth:
     build: .
-    command: authserver.main:app
+    command: authserver:app
     ports:
-    - 8002:8000
+    - 8001:8000
     environment:
     - AUTHSERVER_DB_URL=postgresql://authserver:authserver@db:5432/authserver
     depends_on:

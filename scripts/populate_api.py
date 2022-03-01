@@ -121,7 +121,7 @@ snacks: Sequence[UpsertModel] = [
 
 
 def populate(
-    session: Optional[Session] = None, api_url: str = "http://localhost:8001/products"
+    session: Optional[Session] = None, api_url: str = "http://localhost:8000/products"
 ):
     if session is None:
         session = Session()

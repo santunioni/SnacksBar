@@ -51,6 +51,3 @@ def create_app(limiters: Sequence[FastAPILimiter] = tuple()) -> FastAPI:
         api.add_middleware(BaseHTTPMiddleware, dispatch=mid)
 
     return api
-
-
-app = create_app(create_limiters())

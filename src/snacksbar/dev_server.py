@@ -1,7 +1,7 @@
 import uvicorn
 
 from authserver.routes import router as auth_router
-from snacksbar.main import create_app
+from snacksbar import create_app
 
 app = create_app()
 

@@ -18,6 +18,3 @@ def create_app() -> FastAPI:
         allow_headers=["*"],
     )
     return api
-
-
-app = create_app()
