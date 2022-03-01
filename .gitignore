@@ -1,4 +1,4 @@
-**/.idea/
-**/*.sqlite3
 **/*cache*
-data/**
+data/
+.idea/
+.vscode/
