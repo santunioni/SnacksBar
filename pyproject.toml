@@ -68,6 +68,8 @@ tox = "^3.24.5"
 sqlalchemy-stubs = "^0.4"
 python-dotenv = "^0.19.2"
 autoflake = "^1.4"
+requests = "^2.27.1"
+requests-oauthlib = "^1.3.1"
 
 [tool.pylint.design]
 max-returns = 8

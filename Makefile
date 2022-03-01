@@ -25,7 +25,7 @@ pre-commit:
 test:
 	@poetry run pytest tests
 
-checks: lint mypy pre-commit test
+checks: black autoflake pylint mypy pre-commit test
 
 push:
 	@git push && git push --tags

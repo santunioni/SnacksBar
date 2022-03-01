@@ -6,13 +6,17 @@ from pydantic import Field
 from snacksbar.utils import APIModel
 
 
+class Identified(APIModel):
+    id: int
+
+
 class PricedIn(APIModel):
     name: str
     price: Decimal
 
 
-class PricedOut(PricedIn):
-    id: int
+class PricedOut(PricedIn, Identified):
+    ...
 
 
 class CategoryIn(PricedIn):
@@ -41,10 +45,14 @@ class DrinkOut(PricedOut):
 
 class SnackIn(APIModel):
     name: str
-    category: int = Field(..., alias="category_id")
-    ingredients: Sequence[int] = Field(default_factory=list)
+    category: Identified
+    ingredients: Sequence[Identified] = Field(default_factory=list)
 
 
-class SnackOut(SnackIn):
-    id: int
+class SnackOutMinimal(SnackIn, Identified):
+    ...
+
+
+class SnackOut(SnackIn, Identified):
+    category: PricedOut
     ingredients: Sequence[PricedOut] = Field(default_factory=list)

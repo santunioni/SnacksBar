@@ -33,8 +33,8 @@ def create_limiters() -> Sequence[FastAPILimiter]:
     api_limiter = TotalLimiter(limit=Rate(2000, 1), storage=memory)
 
     redis = RedisStorage(client=Redis.from_url(APISettings.from_cache().CACHE_DB_URL))
-    ip_limiter = IPLimiter(limit=Rate(10, 1), storage=redis)
-    user_limiter = UserLimiter(limit=Rate(2, 5), storage=redis)
+    ip_limiter = IPLimiter(limit=Rate(100, 1), storage=redis)
+    user_limiter = UserLimiter(limit=Rate(2000, 5), storage=redis)
 
     return api_limiter, ip_limiter, user_limiter
 

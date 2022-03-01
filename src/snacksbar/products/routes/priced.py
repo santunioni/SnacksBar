@@ -1,6 +1,7 @@
 from typing import NamedTuple, Sequence, Type
 
 from fastapi import APIRouter, Path
+from sqlalchemy.orm import Session
 from starlette import status
 from starlette.exceptions import HTTPException
 
@@ -37,10 +38,13 @@ class ProductsCRUD:
             map(self.__product_out.from_orm, session.query(self.__db_cls).all())
         )
 
+    def __get_optional_product(self, _id: int, session: Session):
+        return session.query(self.__db_cls).get(_id)
+
     async def __get_product_by_id(
         self, _id=ID_PATH, session=DependsSession
     ) -> PricedOut:
-        product_db = session.query(self.__db_cls).get(_id)
+        product_db = self.__get_optional_product(_id, session)
         if product_db is None:
             raise HTTPException(
                 status_code=404, detail=f"{self.__names.singular.title()} not found."
@@ -56,9 +60,13 @@ class ProductsCRUD:
     async def __put_product(
         self, product: PricedIn, _id=ID_PATH, session=DependsSession
     ):
-        product_db = await self.__get_product_by_id(_id, session)
-        product_db.name = product.name
-        product_db.price = product.price
+        product_db = self.__get_optional_product(_id, session)
+        if product_db is None:
+            product_db = self.__db_cls(id=_id, name=product.name, price=product.price)
+        else:
+            product_db.name = product.name
+            product_db.price = product.price
+        session.add(product_db)
         session.commit()
         return product_db
 
