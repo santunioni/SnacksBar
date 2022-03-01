@@ -5,11 +5,11 @@ from sqlalchemy.orm import Session
 from starlette import status
 from starlette.exceptions import HTTPException
 
+from snacksbar.products.dtos import PricedIn, PricedOut
 from snacksbar.security import Scopes
 
 from ..db.models import Base
 from ..db.session import DependsSession
-from .dtos import PricedIn, PricedOut
 
 
 class Names(NamedTuple):

@@ -1,11 +1,12 @@
 from decimal import Decimal
 from typing import NamedTuple, Optional, Sequence
 
+from devtools import debug as print
 from requests import Session
 from requests.auth import HTTPBasicAuth
 from requests_oauthlib import OAuth2Session
-from devtools import debug as print
-from snacksbar.products.routes.dtos import SnackIn, PricedIn, Identified
+
+from snacksbar.products.dtos import Identified, PricedIn, SnackIn
 from snacksbar.utils import APIModel
 
 
@@ -120,7 +121,7 @@ snacks: Sequence[UpsertModel] = [
 
 
 def populate(
-    session: Optional[Session] = None, api_url: str = "http://localhost:8000/products"
+    session: Optional[Session] = None, api_url: str = "http://localhost:8001/products"
 ):
     if session is None:
         session = Session()

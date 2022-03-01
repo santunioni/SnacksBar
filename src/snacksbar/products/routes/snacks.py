@@ -1,4 +1,4 @@
-from typing import Sequence, Optional
+from typing import Optional, Sequence
 
 from fastapi import APIRouter, Path
 from sqlalchemy.orm import Session
@@ -6,8 +6,9 @@ from starlette import status
 from starlette.exceptions import HTTPException
 from starlette.responses import Response
 
+from snacksbar.products.dtos import SnackIn, SnackOut, SnackOutMinimal
 from snacksbar.security import Scopes
-from .dtos import SnackIn, SnackOut, SnackOutMinimal
+
 from ..db.models import Snack
 from ..db.session import DependsSession
 
@@ -42,6 +43,8 @@ async def get_snack_by_id(_id=ID_PATH, session=DependsSession):
 async def post_snack(snack: SnackIn, session=DependsSession):
     snack_db = Snack(name=snack.name, category_id=snack.category.id)
 
+    session.add(snack_db)
+
     for ingredient in snack.ingredients:
         snack_db.insert_ingredient(ingredient)
 
@@ -70,6 +73,8 @@ async def put_snack(
     else:
         snack_db.name = snack.name
         snack_db.category_id = snack.category.id
+
+    session.add(snack_db)
 
     for ingredient in snack.ingredients:
         snack_db.insert_ingredient(ingredient)

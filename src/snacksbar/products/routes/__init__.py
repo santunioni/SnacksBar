@@ -1,9 +1,6 @@
 from fastapi import APIRouter
 
-from snacksbar.security import Scopes
-
-from ..db.models import Category, Drink, Ingredient
-from .dtos import (
+from snacksbar.products.dtos import (
     CategoryIn,
     CategoryOut,
     DrinkIn,
@@ -11,6 +8,9 @@ from .dtos import (
     IngredientIn,
     IngredientOut,
 )
+from snacksbar.security import Scopes
+
+from ..db.models import Category, Drink, Ingredient
 from .priced import Names, ProductsCRUD
 from .snacks import router as snacks_router
 

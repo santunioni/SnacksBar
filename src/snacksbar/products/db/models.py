@@ -1,12 +1,13 @@
 from __future__ import annotations
+
 from decimal import Decimal
 from typing import List, Union
 
 import sqlalchemy as sql
 from sqlalchemy.ext.declarative import DeclarativeMeta, declarative_base
-from sqlalchemy.orm import relationship, Session
+from sqlalchemy.orm import Session, relationship
 
-from snacksbar.products.routes.dtos import Identified
+from snacksbar.products.dtos import Identified
 
 Base: DeclarativeMeta = declarative_base()
 

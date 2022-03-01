@@ -11,10 +11,13 @@ autoflake:
 	--remove-all-unused-imports \
 	--ignore-init-module-imports
 
+isort:
+	@poetry run isort src tests
+
 pylint:
 	@poetry run pylint --rcfile pylint.cfg src tests
 
-lint: black autoflake pylint
+lint: black autoflake isort black pylint
 
 mypy:
 	@poetry run mypy src tests
@@ -25,7 +28,7 @@ pre-commit:
 test:
 	@poetry run pytest tests
 
-checks: black autoflake pylint mypy pre-commit test
+checks: lint mypy pre-commit test
 
 push:
 	@git push && git push --tags
