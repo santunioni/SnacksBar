@@ -35,8 +35,11 @@ run:
 	@docker-compose up --build -d
 	@docker-compose logs -f
 
+m=""
+msg=""
+message=""
 migrations:
-	@cd src || true && alembic revision --autogenerate
+	@cd src || true && alembic revision --autogenerate -m "$(m)$(msg)$(message)"
 
 migrate:
 	@cd src || true && alembic upgrade head
