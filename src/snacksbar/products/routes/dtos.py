@@ -47,3 +47,4 @@ class SnackIn(APIModel):
 
 class SnackOut(SnackIn):
     id: int
+    ingredients: Sequence[PricedOut] = Field(default_factory=list)
